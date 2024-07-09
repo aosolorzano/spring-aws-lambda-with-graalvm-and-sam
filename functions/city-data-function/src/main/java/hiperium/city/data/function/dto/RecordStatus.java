@@ -1,4 +1,4 @@
-package hiperium.city.data.function.entities;
+package hiperium.city.data.function.dto;
 
 /**
  * Enum representing the possible status of a record.

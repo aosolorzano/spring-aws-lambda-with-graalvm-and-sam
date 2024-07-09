@@ -28,14 +28,15 @@
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/awspring/spring-cloud-aws</url>
-        <connection>scm:git:git://github.com/awspring/spring-cloud-aws.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/awspring/spring-cloud-aws.git</developerConnection>
+        <url>https://github.com/aosolorzano/spring-aws-with-native-and-sam</url>
+        <connection>scm:git:git://github.com/aosolorzano/spring-aws-with-native-and-sam.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/aosolorzano/spring-aws-with-native-and-sam.git</developerConnection>
     </scm>
 
     <properties>
         <java.version>21</java.version>
         <asciidoctor.version>3.0.0</asciidoctor.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <os-classifier.version>1.7.1</os-classifier.version>
         <logback-contrib.version>0.1.5</logback-contrib.version>
         <spring-modulith.version>1.2.1</spring-modulith.version>
@@ -43,7 +44,6 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tracing-class>hiperium.city.TracingApplicationTest</tracing-class>
         <spring-cloud-function.version>4.1.2</spring-cloud-function.version>
     </properties>
 
@@ -151,6 +151,18 @@
             <version>${logback-contrib.version}</version>
         </dependency>
 
+        <!-- MAPSTRUCT -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
         <!-- TESTING -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -236,6 +248,7 @@
                                 <argument>${start-class}</argument>
                             </arguments>
                             <environmentVariables>
+                                <SPRING_PROFILES_ACTIVE>tracing</SPRING_PROFILES_ACTIVE>
                                 <SPRING_CLOUD_AWS_ENDPOINT>http://localhost:4566</SPRING_CLOUD_AWS_ENDPOINT>
                             </environmentVariables>
                         </configuration>

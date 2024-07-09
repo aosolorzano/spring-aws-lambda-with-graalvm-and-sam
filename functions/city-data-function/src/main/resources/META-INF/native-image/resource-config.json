@@ -39,13 +39,13 @@
   }, {
     "pattern":"\\QMETA-INF/validation.xml\\E"
   }, {
-    "pattern":"\\Qapplication-local.properties\\E"
+    "pattern":"\\Qapplication-tracing.properties\\E"
   }, {
-    "pattern":"\\Qapplication-local.xml\\E"
+    "pattern":"\\Qapplication-tracing.xml\\E"
   }, {
-    "pattern":"\\Qapplication-local.yaml\\E"
+    "pattern":"\\Qapplication-tracing.yaml\\E"
   }, {
-    "pattern":"\\Qapplication-local.yml\\E"
+    "pattern":"\\Qapplication-tracing.yml\\E"
   }, {
     "pattern":"\\Qapplication.properties\\E"
   }, {
@@ -55,13 +55,13 @@
   }, {
     "pattern":"\\Qapplication.yml\\E"
   }, {
-    "pattern":"\\Qconfig/application-local.properties\\E"
+    "pattern":"\\Qconfig/application-tracing.properties\\E"
   }, {
-    "pattern":"\\Qconfig/application-local.xml\\E"
+    "pattern":"\\Qconfig/application-tracing.xml\\E"
   }, {
-    "pattern":"\\Qconfig/application-local.yaml\\E"
+    "pattern":"\\Qconfig/application-tracing.yaml\\E"
   }, {
-    "pattern":"\\Qconfig/application-local.yml\\E"
+    "pattern":"\\Qconfig/application-tracing.yml\\E"
   }, {
     "pattern":"\\Qconfig/application.properties\\E"
   }, {
@@ -78,6 +78,10 @@
     "pattern":"\\Qhiperium/city/data/function/\\E"
   }, {
     "pattern":"\\Qhiperium/city/data/function/configurations/FunctionsConfig.class\\E"
+  }, {
+    "pattern":"\\Qhiperium/city/data/function/mappers/CityMapper.class\\E"
+  }, {
+    "pattern":"\\Qhiperium/city/data/function/mappers/CityMapperImpl.class\\E"
   }, {
     "pattern":"\\Qhiperium/city/data/function/utils/LambdaInvokerUtil.class\\E"
   }, {
@@ -542,12 +546,6 @@
     "pattern":"\\Qspring.properties\\E"
   }, {
     "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfc.nrm\\E"
-  }, {
-    "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfkc.nrm\\E"
-  }, {
-    "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/uprops.icu\\E"
-  }, {
-    "pattern":"java.base:\\Qsun/net/idn/uidna.spp\\E"
   }]},
   "bundles":[]
 }

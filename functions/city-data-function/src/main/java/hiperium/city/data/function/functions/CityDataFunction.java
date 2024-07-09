@@ -1,8 +1,8 @@
 package hiperium.city.data.function.functions;
 
 import hiperium.city.data.function.dto.CityIdRequest;
-import hiperium.city.data.function.entities.City;
-import hiperium.city.data.function.entities.RecordStatus;
+import hiperium.city.data.function.dto.CityResponse;
+import hiperium.city.data.function.mappers.CityMapper;
 import hiperium.city.data.function.utils.AppConstants;
 import hiperium.city.data.function.utils.BeanValidationUtils;
 import org.slf4j.Logger;
@@ -20,15 +20,20 @@ import java.util.function.Function;
 
 /**
  * Represents a function that finds a city by its identifier.
- * @apiNote The Enhanced Client has problems when used with Spring Native.
+ *
+ * @apiNote The Enhanced Client has problems at runtime when used with Spring Native.
+ * This is because the Enhanced Client uses reflection to create the DynamoDbClient.
+ * The solution is to use the low-level client instead.
  */
-public class CityDataFunction implements Function<Message<CityIdRequest>, City> {
+public class CityDataFunction implements Function<Message<CityIdRequest>, CityResponse> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CityDataFunction.class);
 
+    private final CityMapper cityMapper;
     private final DynamoDbClient dynamoDbClient;
 
-    public CityDataFunction(DynamoDbClient dynamoDbClient) {
+    public CityDataFunction(CityMapper cityMapper, DynamoDbClient dynamoDbClient) {
+        this.cityMapper = cityMapper;
         this.dynamoDbClient = dynamoDbClient;
     }
 
@@ -38,7 +43,7 @@ public class CityDataFunction implements Function<Message<CityIdRequest>, City> 
      * @return The city with the matching identifier, or null if not found.
      */
     @Override
-    public City apply(Message<CityIdRequest> cityIdRequestMessage) {
+    public CityResponse apply(Message<CityIdRequest> cityIdRequestMessage) {
         LOGGER.debug("Finding city with ID: {}", cityIdRequestMessage);
         CityIdRequest cityIdRequest = cityIdRequestMessage.getPayload();
         BeanValidationUtils.validateBean(cityIdRequest);
@@ -53,19 +58,12 @@ public class CityDataFunction implements Function<Message<CityIdRequest>, City> 
         try {
             Map<String, AttributeValue> returnedItem = this.dynamoDbClient.getItem(request).item();
             if (Objects.nonNull(returnedItem) && !returnedItem.isEmpty()) {
-                // TODO: USE MAPSTRUCT
-                City city = new City(
-                    returnedItem.get("id").s(),
-                    returnedItem.get("name").s(),
-                    RecordStatus.valueOf(returnedItem.get("status").s()),
-                    returnedItem.get("timezone").s(),
-                    returnedItem.get("country").s()
-                );
-                LOGGER.debug("City found: {}", city);
-                return city;
+                CityResponse response = this.cityMapper.toCityResponse(returnedItem);
+                LOGGER.debug("City found: {}", response);
+                return response;
             }
         } catch (DynamoDbException e) {
-            LOGGER.error("ERROR: Couldn't find a City with ID '{}': {}", cityIdRequest.id(), e.getMessage());
+            LOGGER.error("ERROR: Couldn't find a CityResponse with ID '{}': {}", cityIdRequest.id(), e.getMessage());
         }
         return null;
     }

@@ -2,7 +2,7 @@ package hiperium.city.data.function;
 
 import hiperium.city.data.function.common.TestContainersBase;
 import hiperium.city.data.function.dto.CityIdRequest;
-import hiperium.city.data.function.entities.City;
+import hiperium.city.data.function.dto.CityResponse;
 import hiperium.city.data.function.utils.AppConstants;
 import hiperium.city.data.function.utils.TestsUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,25 +37,25 @@ class FunctionalApplicationTest extends TestContainersBase {
     }
 
     @Test
-    @DisplayName("City found")
+    @DisplayName("CityResponse found")
     void givenValidCityId_whenInvokeLambdaFunction_thenReturnCityData() {
-        Function<Message<CityIdRequest>, City> cityDataFunction = this.getFunctionUnderTest();
+        Function<Message<CityIdRequest>, CityResponse> cityDataFunction = this.getFunctionUnderTest();
         Message<CityIdRequest> message = TestsUtils.createMessage(new CityIdRequest(EXISTING_CITY_ID));
-        City city = cityDataFunction.apply(message);
-        assertThat(city).isNotNull();
+        CityResponse cityResponse = cityDataFunction.apply(message);
+        assertThat(cityResponse).isNotNull();
     }
 
     @Test
-    @DisplayName("City not found")
+    @DisplayName("CityResponse not found")
     void givenNonExistingCityId_whenInvokeLambdaFunction_thenReturnNull() {
-        Function<Message<CityIdRequest>, City> cityDataFunction = this.getFunctionUnderTest();
+        Function<Message<CityIdRequest>, CityResponse> cityDataFunction = this.getFunctionUnderTest();
         Message<CityIdRequest> message = TestsUtils.createMessage(new CityIdRequest("non-existing-id"));
-        City city = cityDataFunction.apply(message);
-        assertThat(city).isNull();
+        CityResponse cityResponse = cityDataFunction.apply(message);
+        assertThat(cityResponse).isNull();
     }
 
-    private Function<Message<CityIdRequest>, City> getFunctionUnderTest() {
-        Function<Message<CityIdRequest>, City> function = this.functionCatalog.lookup(Function.class,
+    private Function<Message<CityIdRequest>, CityResponse> getFunctionUnderTest() {
+        Function<Message<CityIdRequest>, CityResponse> function = this.functionCatalog.lookup(Function.class,
             AppConstants.FUNCTIONAL_BEAN_NAME);
         assertThat(function).isNotNull();
         return function;

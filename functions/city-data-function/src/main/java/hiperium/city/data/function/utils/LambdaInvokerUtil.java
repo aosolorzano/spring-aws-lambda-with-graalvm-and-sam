@@ -1,7 +1,7 @@
 package hiperium.city.data.function.utils;
 
 import hiperium.city.data.function.dto.CityIdRequest;
-import hiperium.city.data.function.entities.City;
+import hiperium.city.data.function.dto.CityResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,20 +16,20 @@ import java.util.function.Function;
 
 /**
  * NOTE: This class will not be used in the final implementation. This is only used for local testing, so this is removed
- * from the final implementation in the src/main/java/hiperium/city/data/function/components/LambdaInvoker.java file.
+ * from the final implementation in the POM file.
  * <p>
  * The LambdaInvokerUtil class is responsible for invoking a Lambda function by passing a CityIdRequest message
- * and returning a City object.
+ * and returning a {@link CityResponse} object.
  */
 @Component
-@Profile("local")
+@Profile("tracing")
 public class LambdaInvokerUtil implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LambdaInvokerUtil.class);
 
-    private final Function<Message<CityIdRequest>, City> cityDataFunction;
+    private final Function<Message<CityIdRequest>, CityResponse> cityDataFunction;
 
-    public LambdaInvokerUtil(Function<Message<CityIdRequest>, City> cityDataFunction) {
+    public LambdaInvokerUtil(Function<Message<CityIdRequest>, CityResponse> cityDataFunction) {
         this.cityDataFunction = cityDataFunction;
     }
 
@@ -40,9 +40,11 @@ public class LambdaInvokerUtil implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-        LOGGER.debug("Invoking Lambda function");
+        LOGGER.info("Invoking Lambda function...");
         Message<CityIdRequest> message = getCityIdRequestMessage();
         this.cityDataFunction.apply(message);
+        LOGGER.info("Lambda function invoked successfully.");
+        LOGGER.info("You can exit the application now.");
     }
 
     private static Message<CityIdRequest> getCityIdRequestMessage() {
