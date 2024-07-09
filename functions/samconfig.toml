@@ -1,0 +1,78 @@
+# More information about the configuration file can be found here:
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html
+version=0.1
+
+[default]
+[default.validate.parameters]
+lint = true
+beta_features = false
+
+[default.build.parameters]
+cached = true
+parallel = true
+use_container = true
+beta_features = false
+build_image = ["hiperium/lambda-native-builder:1.0"]
+
+[dev]
+[dev.pipeline_bootstrap.parameters]
+confirm_changeset = true
+permissions_provider = "iam"
+create_image_repository = false
+cicd_provider = "AWS CodePipeline"
+
+[dev.package.parameters]
+resolve_s3 = false
+beta_features = false
+
+[dev.deploy.parameters]
+resolve_s3 = false
+beta_features = false
+disable_rollback = true
+confirm_changeset = true
+fail_on_empty_changeset = false
+
+[dev.sync.parameters]
+watch = true
+
+[test]
+[test.pipeline_bootstrap.parameters]
+permissions_provider = "iam"
+cicd_provider = "AWS CodePipeline"
+create_image_repository = false
+confirm_changeset = true
+
+[test.deploy.parameters]
+resolve_s3 = false
+beta_features = false
+disable_rollback = true
+confirm_changeset = true
+fail_on_empty_changeset = false
+
+[test.package.parameters]
+resolve_s3 = false
+beta_features = false
+
+[test.sync.parameters]
+watch = false
+
+[prod]
+[prod.pipeline_bootstrap.parameters]
+permissions_provider = "iam"
+cicd_provider = "AWS CodePipeline"
+create_image_repository = false
+confirm_changeset = true
+
+[prod.package.parameters]
+resolve_s3 = false
+beta_features = false
+
+[prod.deploy.parameters]
+resolve_s3 = false
+beta_features = false
+disable_rollback = false
+confirm_changeset = true
+fail_on_empty_changeset = true
+
+[prod.sync.parameters]
+watch = false

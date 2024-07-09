@@ -1,0 +1,33 @@
+#####################################################################################
+############################# Stage 1: Builder Image ################################
+#####################################################################################
+FROM hiperium/native-image-builder:1.0 AS builder
+
+WORKDIR /workspace
+
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY functions/city-data-function/pom.xml           functions/city-data-function/pom.xml
+RUN  ./mvnw dependency:go-offline -B -f             functions/city-data-function/pom.xml
+COPY functions/city-data-function/src               functions/city-data-function/src
+COPY functions/city-data-function/tools/shell       functions/city-data-function/tools/shell
+COPY functions/city-data-function/tools/assembly    functions/city-data-function/tools/assembly
+
+RUN ./mvnw -T 4C clean native:compile -Pnative -DskipTests -f functions/city-data-function -Ddependency-check.skip=true
+
+#####################################################################################
+############################ Stage 2: Application Image #############################
+#####################################################################################
+FROM public.ecr.aws/lambda/provided:al2023-arm64
+
+ARG APP_ROOT=/workspace/functions/city-data-function
+
+COPY --from=builder ${APP_ROOT}/target/native               ${LAMBDA_TASK_ROOT}
+COPY --from=builder ${APP_ROOT}/tools/shell/bootstrap       ${LAMBDA_RUNTIME_DIR}
+COPY --from=builder ${APP_ROOT}/target/native-assembly.zip  /var/tmp/native-assembly.zip
+
+RUN chmod +x ${LAMBDA_RUNTIME_DIR}/bootstrap
+
+EXPOSE 8080
+CMD [ "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest" ]

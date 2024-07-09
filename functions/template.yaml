@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'SAM Template for the City functions.'
+
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 512
+    Runtime: "provided.al2023"
+    Architectures:
+      - "arm64"
+
+Resources:
+  CitiesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "Cities"
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+
+  CityDataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: "city-data-function"
+      Description: "City Data function for internal services."
+      Handler: "org.springframework.cloud.function.adapter.FunctionInvoker::handleRequest"
+      CodeUri: .
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref CitiesTable
+    Metadata:
+      BuildMethod: "makefile"
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/dynamodb/lambda/${CityDataFunction}"
+      RetentionInDays: 7
+
+Outputs:
+  CitiesDataFunctionArn:
+    Description: "City Data function ARN."
+    Value: !GetAtt CityDataFunction.Arn
+
+  CitiesTableArn:
+    Description: "Cities DynamoDB table ARN."
+    Value: !GetAtt CitiesTable.Arn
+
+  CitiesDataFunctionIamRoleArn:
+    Description: "Implicit IAM Role ARN created for the City Data function."
+    Value: !GetAtt CityDataFunctionRole.Arn

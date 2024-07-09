@@ -1,0 +1,31 @@
+{
+  "Cities": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "a0ecb466-7ef5-47bf-a1ca-12f9f9328528"
+          },
+          "name": {
+            "S": "Hiperium City"
+          },
+          "country": {
+            "S": "Ecuador"
+          },
+          "status": {
+            "S": "ACT"
+          },
+          "timezone": {
+            "S": "-05:00"
+          },
+          "createdAt": {
+            "S": "2020-07-01T00:00:00Z-05:00"
+          },
+          "updatedAt": {
+            "S": "2020-07-01T00:00:00Z-05:00"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+name: "hiperium-cities"
+services:
+
+  city-data-function:
+    image: "hiperium/city-data-function:1.0.0"
+    container_name: "city-data-function"
+    build:
+      dockerfile: ./functions/city-data-function/tools/docker/Dockerfile-native
+    ports:
+      - "9000:8080"
+    env_file:
+      - ./functions/city-data-function/tools/docker/local.env
+    volumes:
+      - city-shared-data:/var/tmp
+    networks:
+      - "city-network"
+
+  city-localstack:
+    image: "localstack/localstack:3.5"
+    container_name: "city-localstack"
+    ports:
+      - "4566:4566"
+    env_file:
+      # https://docs.localstack.cloud/references/configuration/
+      - ./utils/docker/localstack/local.env
+    volumes:
+      # FUNCTION RESOURCES
+      - ./functions/city-data-function/src/test/resources/localstack/table-data.json:/var/lib/localstack/table-data.json
+      - ./functions/city-data-function/src/test/resources/localstack/table-setup.sh:/etc/localstack/init/ready.d/1_table-setup.sh
+      - ./functions/city-data-function/src/test/resources/localstack/lambda-native-setup.sh:/etc/localstack/init/ready.d/2_lambda-setup.sh
+      # DOCKER RESOURCES
+      - city-shared-data:/var/tmp
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - "city-data-function"
+    networks:
+      - "city-network"
+
+volumes:
+  city-shared-data:
+
+networks:
+  city-network:
