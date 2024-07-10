@@ -45,7 +45,7 @@
     </springProfile>
 
     <springProfile name="test">
-        <logger name="hiperium.city.data.function.AbstractContainerBaseTest" level="INFO" additivity="false">
+        <logger name="hiperium.city.data.function.common.TestContainersBase" level="INFO" additivity="false">
             <appender-ref ref="textAppender"/>
         </logger>
     </springProfile>

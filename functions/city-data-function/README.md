@@ -1,4 +1,4 @@
-### Hiperium City Data Lambda Function
+## Hiperium City Data Lambda Function
 
 This project contains source code and supports files for a serverless application that you can deploy with the SAM CLI.
 It includes the following files and folders.
@@ -10,7 +10,6 @@ The application uses AWS resources like Lambda and DynamoDB.
 These resources are defined in the `template.yaml` file in the parent project.
 
 ### GraalVM
-
 This Lambda Function uses GraalVM to create a native binary of the Java application.
 By compiling Java to a native Linux executable, the performance is increased and cold-start is reduced.
 
@@ -21,24 +20,44 @@ A docker image is required to generate the Native Linux Executable for the Lambd
 docker pull hiperium/native-image-builder:latest
 ```
 
-### Running Integration tests using Testcontainers.
-
+---
+## Running Integration tests using Testcontainers.
 Tests are defined in the `functions/city-data-function/src/test` folder.
 Execute the following command to run the tests from the project's root directory:
-
 ```bash
 ./mvnw test -f functions/city-events-function/pom.xml
 ```
 
-### Deploy Lambda Function Locally using Docker Compose
+---
+## Deploying Lambda Function using Spring Boot Docker Compose
+Start the main class from the IDE to run the Lambda Function. 
+The project uses the "local" profile as default,
+so this profile configures the Docker Compose deployment for the LocalStack environment:
 
+```properties
+spring.docker.compose.enabled=true
+spring.docker.compose.start.log-level=debug
+spring.docker.compose.lifecycle-management=start_and_stop
+spring.docker.compose.file=functions/city-data-function/tools/spring/compose.yaml
+```
+
+Now, you can invoke the Lambda Function using the following command:
+```bash
+curl -H "Content-Type: application/json" "http://localhost:8080/findById" \
+  -d @functions/city-data-function/src/test/resources/requests/lambda-valid-id-request.json
+```
+
+Recall this is used only for local development and testing purposes.
+The other Spring profiles don't have this feature enabled.
+
+---
+## Deploying Lambda Function using Docker Compose
 The following command will deploy the Lambda Function and LocalStack using Docker Compose:
 ```bash
 docker compose up --build
 ```
 
 ### Invoke Lambda Function Locally using CURL
-
 The following command will invoke the Lambda Function using CURL:
 ```bash
 curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" \
@@ -46,13 +65,13 @@ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" \
 ```
 
 ### Getting records from DynamoDB on LocalStack.
-
 Execute the following command to get the created records in DynamoDB:
 ```bash
 awslocal dynamodb scan --table-name Cities
 ```
 
-### Deploy the Lambda Function with SAM CLI.
+---
+## Deploy the Lambda Function with SAM CLI.
 
 The Serverless Application Model Command Line Interface (SAM CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications.
 It uses Docker to run your functions in an Amazon Linux environment that matches your Lambda infrastructure in AWS.

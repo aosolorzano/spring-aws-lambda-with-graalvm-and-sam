@@ -58,16 +58,16 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-function-dependencies</artifactId>
-                <version>${spring-cloud-function.version}</version>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-bom</artifactId>
+                <version>${spring-modulith.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework.modulith</groupId>
-                <artifactId>spring-modulith-bom</artifactId>
-                <version>${spring-modulith.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-function-dependencies</artifactId>
+                <version>${spring-cloud-function.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -252,8 +252,8 @@
                                 <argument>${start-class}</argument>
                             </arguments>
                             <environmentVariables>
-                                <SPRING_PROFILES_ACTIVE>tracing</SPRING_PROFILES_ACTIVE>
                                 <SPRING_CLOUD_AWS_ENDPOINT>http://localhost:4566</SPRING_CLOUD_AWS_ENDPOINT>
+                                <SPRING_DOCKER_COMPOSE_FILE>tools/spring/compose.yaml</SPRING_DOCKER_COMPOSE_FILE>
                             </environmentVariables>
                         </configuration>
                     </plugin>

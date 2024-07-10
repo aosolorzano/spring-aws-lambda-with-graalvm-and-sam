@@ -16,10 +16,10 @@ services:
       - "city-network"
 
   city-localstack:
-    image: "localstack/localstack:3.5"
+    extends:
+      file: ./functions/city-data-function/tools/spring/compose.yaml
+      service: "spring-cities-localstack"
     container_name: "city-localstack"
-    ports:
-      - "4566:4566"
     env_file:
       # https://docs.localstack.cloud/references/configuration/
       - ./utils/docker/localstack/local.env

@@ -7,6 +7,7 @@ import hiperium.city.data.function.utils.AppConstants;
 import hiperium.city.data.function.utils.BeanValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -16,6 +17,7 @@ import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -55,16 +57,19 @@ public class CityDataFunction implements Function<Message<CityIdRequest>, CityRe
             .tableName(AppConstants.CITY_TABLE_NAME)
             .build();
 
+        CityResponse response;
         try {
             Map<String, AttributeValue> returnedItem = this.dynamoDbClient.getItem(request).item();
-            if (Objects.nonNull(returnedItem) && !returnedItem.isEmpty()) {
-                CityResponse response = this.cityMapper.toCityResponse(returnedItem);
-                LOGGER.debug("City found: {}", response);
-                return response;
+            if (Objects.isNull(returnedItem) || returnedItem.isEmpty()) {
+                response = new CityResponse(null, null, null, null, HttpStatus.NOT_FOUND.value(), null);
+            } else {
+                response = this.cityMapper.toCityResponse(returnedItem);
             }
-        } catch (DynamoDbException e) {
-            LOGGER.error("ERROR: Couldn't find a CityResponse with ID '{}': {}", cityIdRequest.id(), e.getMessage());
+        } catch (DynamoDbException exception) {
+            LOGGER.error("ERROR: When trying to find a City with ID '{}' >>> {}", cityIdRequest.id(), exception.getMessage());
+            response = new CityResponse(null, null, null, null, HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                Optional.of("Internal server error when trying to find City data."));
         }
-        return null;
+        return response;
     }
 }

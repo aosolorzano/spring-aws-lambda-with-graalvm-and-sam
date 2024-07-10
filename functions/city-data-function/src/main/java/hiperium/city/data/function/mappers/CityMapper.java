@@ -24,10 +24,12 @@ public interface CityMapper {
      *                          and the values represent the corresponding attribute values.
      * @return A City object with the attribute values mapped from the itemAttributesMap.
      */
-    @Mapping(target = "id",       expression = "java(getStringValueFromAttributesMap(itemAttributesMap, CityResponse.ID_COLUMN_NAME))")
-    @Mapping(target = "name",     expression = "java(getStringValueFromAttributesMap(itemAttributesMap, CityResponse.NAME_COLUMN_NAME))")
-    @Mapping(target = "status",   expression = "java(getStatusEnumFromAttributesMap(itemAttributesMap))")
-    @Mapping(target = "timezone", expression = "java(getStringValueFromAttributesMap(itemAttributesMap, CityResponse.TIMEZONE_COLUMN_NAME))")
+    @Mapping(target = "id",           expression = "java(getStringValueFromAttributesMap(itemAttributesMap, CityResponse.ID_COLUMN_NAME))")
+    @Mapping(target = "name",         expression = "java(getStringValueFromAttributesMap(itemAttributesMap, CityResponse.NAME_COLUMN_NAME))")
+    @Mapping(target = "status",       expression = "java(getStatusEnumFromAttributesMap(itemAttributesMap))")
+    @Mapping(target = "timezone",     expression = "java(getStringValueFromAttributesMap(itemAttributesMap, CityResponse.TIMEZONE_COLUMN_NAME))")
+    @Mapping(target = "httpStatus",   constant   = "200")
+    @Mapping(target = "errorMessage", ignore     = true)
     CityResponse toCityResponse(Map<String, AttributeValue> itemAttributesMap);
 
     /**

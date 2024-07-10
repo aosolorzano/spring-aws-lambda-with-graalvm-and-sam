@@ -4,7 +4,7 @@
 * **Level**: 200 - Intermediate.
 * **Technologies**: GraalVM with Java 21, Spring Boot 3, Spring Cloud 4, Spring Native, Spring Modulith, Docker, Testcontainers, LocalStack, Amazon DynamoDB, AWS Lambda, and AWS SAM.
 
-![](utils/images/solutions_architecture.png)
+![](utils/images/solution_architecture_diagram.png)
 
 ---
 ### Description.

@@ -6,11 +6,8 @@ services:
     container_name: "spring-cities-localstack"
     ports:
       - "4566:4566"
-    environment:
-      - "DEBUG=0"
-      - "LS_LOG=info"
-      - "SERVICES=dynamodb"
-      - "EAGER_SERVICE_LOADING=1"
+    env_file:
+      - ./local.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ../../src/test/resources/localstack/table-data.json:/var/lib/localstack/table-data.json

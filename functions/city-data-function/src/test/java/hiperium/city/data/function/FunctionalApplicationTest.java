@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.function.context.FunctionCatalog;
 import org.springframework.cloud.function.context.test.FunctionalSpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.test.context.ActiveProfiles;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -43,6 +44,8 @@ class FunctionalApplicationTest extends TestContainersBase {
         Message<CityIdRequest> message = TestsUtils.createMessage(new CityIdRequest(EXISTING_CITY_ID));
         CityResponse cityResponse = cityDataFunction.apply(message);
         assertThat(cityResponse).isNotNull();
+        assertThat(cityResponse.id()).isEqualTo(EXISTING_CITY_ID);
+        assertThat(cityResponse.httpStatus()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test
@@ -51,7 +54,9 @@ class FunctionalApplicationTest extends TestContainersBase {
         Function<Message<CityIdRequest>, CityResponse> cityDataFunction = this.getFunctionUnderTest();
         Message<CityIdRequest> message = TestsUtils.createMessage(new CityIdRequest("non-existing-id"));
         CityResponse cityResponse = cityDataFunction.apply(message);
-        assertThat(cityResponse).isNull();
+        assertThat(cityResponse).isNotNull();
+        assertThat(cityResponse.id()).isNull();
+        assertThat(cityResponse.httpStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     private Function<Message<CityIdRequest>, CityResponse> getFunctionUnderTest() {
