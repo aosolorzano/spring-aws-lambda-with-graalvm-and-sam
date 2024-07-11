@@ -1,19 +1,14 @@
 name: "spring-cities"
 services:
 
-  spring-cities-localstack:
+  localstack:
     image: "localstack/localstack:3.5"
     container_name: "spring-cities-localstack"
     ports:
       - "4566:4566"
     env_file:
-      - ./local.env
+      - local.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ../../src/test/resources/localstack/table-data.json:/var/lib/localstack/table-data.json
       - ../../src/test/resources/localstack/table-setup.sh:/etc/localstack/init/ready.d/table-setup.sh
-    networks:
-      - "spring-cities-network"
-
-networks:
-  spring-cities-network:
