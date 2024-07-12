@@ -28,7 +28,7 @@ The project is divided into the following files/directories:
 ### Internal project folders.
 The internal project documentation is divided into the following directories:
 
-- **functions/cityResponse-data-function**: Contains a Lambda function that returns basic data from a DynamoDB table.
+- **functions/city-data-function**: Contains a Lambda function that returns basic data from a DynamoDB table.
 
 ---
 ### GraalVM Tracing Agent.
@@ -39,16 +39,29 @@ The utility will read these files and include the necessary classes, methods, an
 even though they aren’t referenced directly in our code:
     
 ```bash
-./mvnw clean process-classes -f functions/cityResponse-data-function/pom.xml -Ptracing-agent
+./mvnw clean process-classes                  \
+    -f functions/city-data-function/pom.xml   \
+    -P tracing-agent
 ```
 
 Then, copy the output files into the "META-INF/native-image" directory to be included by the native-image utility:
 ```bash
-cp -r functions/cityResponse-data-function/target/native-image functions/cityResponse-data-function/src/main/resources/META-INF/native-image
+cp -r functions/city-data-function/target/native-image \
+      functions/city-data-function/src/main/resources/META-INF/native-image
 ```
+
+After this, you can build the native image using as usual and make tests with the AWS Lambda Function.
 
 ---
 ### Deployment Options.
+So far, we have only one deployment option for the Lambda Function as this project is in development.
+This option is using SAM CLI to deploy the Lambda Function to AWS.
+You can execute the following script to show you the deployment options:
+```bash
+./start.sh
+```
+
+Select the default option to deploy the Lambda Function to AWS.
 
 ---
 ### Maven Parent overrides

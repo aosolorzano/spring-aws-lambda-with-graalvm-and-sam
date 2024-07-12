@@ -8,7 +8,6 @@
         <version>1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-
     <name>city-data-function</name>
     <artifactId>city-data-function</artifactId>
     <description>Returns basic City Data to other services in the Hiperium City project.</description>

@@ -38,7 +38,7 @@ so this profile configures the Docker Compose deployment for the LocalStack envi
 spring.docker.compose.enabled=true
 spring.docker.compose.start.log-level=debug
 spring.docker.compose.lifecycle-management=start_and_stop
-spring.docker.compose.file=functions/city-data-function/tools/spring/compose.yaml
+spring.docker.compose.file=functions/city-data-function/tools/docker/compose.yaml
 ```
 
 Now, you can invoke the Lambda Function using the following command:
@@ -79,15 +79,17 @@ It can also emulate your application's build environment and API.
 
 To build the SAM package, you must use the following command:
 ```bash
-sam build --config-env 'default'
+sam build --config-env 'dev'                \
+  --template-file 'functions/template.yaml' \
+  --profile 'city-dev'
 ```
 
 To deploy your application for the first time, run the following in your shell:
 ```bash
-sam deploy                                                      \
-  --config-env 'default'                                        \
-  --template-file 'functions/city-data-function/template.yaml'  \
-  --disable-rollback                                            \
+sam deploy                                    \
+  --config-env 'dev'                          \
+  --template-file 'functions/template.yaml'   \
+  --disable-rollback                          \
   --profile 'city-dev'
 ```
 
@@ -102,13 +104,27 @@ In addition to printing the logs on the terminal, this command has several nifty
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam logs -n 'CityDataFunction'          \
-  --stack-name 'city-data-function'     \
-  --tail                                \
-  --profile 'city-dev'
+sam logs -n "CityDataFunction"            \
+  --stack-name "city-data-function-dev"   \
+  --tail                                  \
+  --profile "city-dev"
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
+
+### Invoke Lambda Function deployed in AWS
+To invoke the Lambda Function deployed in AWS, use the following command:
+```bash
+aws lambda invoke --function-name 'city-data-function' \
+  --payload file://functions/city-data-function/src/test/resources/requests/lambda-valid-id-request.json \
+  --cli-binary-format raw-in-base64-out \
+  --profile 'city-dev' response.json
+```
+
+You must receive a response from the Lambda Function in the `response.json` file:
+```bash
+cat response.json | jq
+```
 
 ### SAM-CLI and APIs (not currently implemented).
 

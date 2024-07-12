@@ -1,0 +1,33 @@
+# More information about the configuration file can be found here:
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html
+version=0.1
+
+[dev]
+[dev.global.parameters]
+stack_name = "city-data-function"
+
+[dev.validate.parameters]
+lint = true
+beta_features = false
+
+[dev.build.parameters]
+cached = false
+parallel = true
+use_container = true
+beta_features = false
+build_image = ["hiperium/native-image-builder:1.0"]
+
+[dev.package.parameters]
+resolve_s3 = true
+beta_features = false
+
+[dev.deploy.parameters]
+resolve_s3 = true
+capabilities = "CAPABILITY_IAM"
+beta_features = false
+disable_rollback = true
+confirm_changeset = true
+fail_on_empty_changeset = false
+
+[dev.sync.parameters]
+watch = true

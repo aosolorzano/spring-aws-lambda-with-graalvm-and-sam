@@ -10,6 +10,12 @@ Globals:
     Architectures:
       - "arm64"
 
+Parameters:
+  SpringProfile:
+    Type: String
+    Default: "dev"
+    Description: "Spring profile to use for the function."
+
 Resources:
   CitiesTable:
     Type: AWS::DynamoDB::Table
@@ -26,20 +32,23 @@ Resources:
   CityDataFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: "city-data-function"
-      Description: "City Data function for internal services."
-      Handler: "org.springframework.cloud.function.adapter.FunctionInvoker::handleRequest"
       CodeUri: .
+      FunctionName: "city-data-function"
+      Description: "City Data function used for internal services only."
+      Handler: "org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest"
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref CitiesTable
+      Environment:
+        Variables:
+          SPRING_PROFILES_ACTIVE: !Ref SpringProfile
     Metadata:
       BuildMethod: "makefile"
 
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/dynamodb/lambda/${CityDataFunction}"
+      LogGroupName: !Sub "/aws/lambda/${CityDataFunction}"
       RetentionInDays: 7
 
 Outputs:
