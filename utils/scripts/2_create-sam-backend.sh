@@ -10,23 +10,6 @@ cd "$WORKING_DIR" || {
 rm -rf "$WORKING_DIR"/.aws-sam
 
 echo ""
-echo "INIT SAM PROJECT..."
-sam init                              \
-  --name "city-data-function"         \
-  --runtime "provided.al2023"         \
-  --package-type "zip"                \
-  --dependency-manager "maven"        \
-  --architecture "arm64"              \
-  --config-env "$AWS_WORKLOADS_ENV"   \
-  --no-tracing                        \
-  --structured-logging                \
-  --no-application-insights           \
-  --no-beta-features                  \
-  --save-params
-echo ""
-echo "DONE!"
-
-echo ""
 echo "VALIDATING SAM TEMPLATE..."
 sam validate --lint
 echo "DONE!"

@@ -8,7 +8,10 @@
 
 ---
 ### Description.
-This project uses Spring Cloud Functions to create an AWS Lambda Function that returns basic Devices data from a DynamoDB table.
+This project uses Spring Cloud Functions to create an AWS Lambda Function that returns basic data from a DynamoDB table.
+You can read the following article on my Medium.com account to get more project details:
+
+- [Using Spring Cloud AWS in Lambda functions to automate SDK client configurations](https://aosolorzano.medium.com/using-spring-cloud-aws-in-lambda-functions-to-automate-sdk-client-configurations-0e27c4beb588).
 
 ---
 ### Prerequisites.
@@ -22,7 +25,7 @@ This project uses Spring Cloud Functions to create an AWS Lambda Function that r
 The project is divided into the following files/directories:
 
 - **functions**: Directory used back-end functions.
-- **utils**: Directory used for project documentation and script files.
+- **utils**: Directory used for script files and other project documentation.
 
 ---
 ### Internal project folders.
